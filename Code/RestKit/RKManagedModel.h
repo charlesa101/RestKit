@@ -14,9 +14,23 @@
 @class RKManagedModel;
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
+// Object Cacheing Support
+ 	
+@protocol RKManagedModelObjectCache
+
+/**
+ * Return a set of objects locally cached in the Core Data store for a given
+ * resource path. The default implementation does nothing, subclasses are responsible
+ * for parsing the object path and querying the managed object context.
+ */ 	
++ (NSArray*)objectsForResourcePath:(NSString*)resourcePath;
+ 		 	
+@end
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
 // RestKit managed models
 
-@interface RKManagedModel : NSManagedObject <RKModelMappable> {
+@interface RKManagedModel : NSManagedObject <RKModelMappable, RKManagedModelObjectCache> {
 	
 }
 
@@ -61,6 +75,9 @@
  *	an array of NSManagedObjectIDs
  */
 + (NSArray*)objectsWithIds:(NSArray*)objectIds;
+
++ (NSManagedObjectID*)idWithObject:(NSManagedObject*)object;
++ (NSArray*)idsWithObjects:(NSArray*)objects;
 
 /**
  *	The primaryKey property mapping, defaults to @"railsID"
@@ -113,11 +130,11 @@
 + (NSString*)formatElementName:(NSString*)elementName forMappingFormat:(RKMappingFormat)format;
 
 /**
- * Return a fetch request used for querying locally cached objects in the Core Data
+ * Returns an array of fetch requests used for querying locally cached objects in the Core Data
  * store for a given resource path. The default implementation does nothing, so subclasses
- * are responsible for parsing the object path and building a valid fetch request.
+ * are responsible for parsing the object path and building a valid array of fetch requests.
  */
-+ (NSFetchRequest*)fetchRequestForResourcePath:(NSString*)resourcePath;
+//+ (NSArray*)fetchRequestsForResourcePath:(NSString*)resourcePath;
 
 - (NSDictionary*)elementNamesAndPropertyValues;
 

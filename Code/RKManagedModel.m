@@ -34,6 +34,21 @@
 	return objectArray;
 }
 
++ (NSManagedObjectID*)idWithObject:(NSManagedObject*)object {
+	return [object objectID];
+}
+
++ (NSArray*)idsWithObjects:(NSArray*)objects {
+	NSMutableArray* ids = [[NSMutableArray alloc] init];
+	for (NSManagedObject* object in objects) {
+		[ids addObject:[object objectID]];
+	}
+	NSArray* idArray = [NSArray arrayWithArray:ids];
+	[ids release];
+	
+	return idArray;
+}
+
 + (NSEntityDescription*)entity {
 	NSString* className = [NSString stringWithCString:class_getName([self class]) encoding:NSASCIIStringEncoding];
 	return [NSEntityDescription entityForName:className inManagedObjectContext:[self managedObjectContext]];
@@ -100,7 +115,10 @@
 #pragma mark -
 #pragma mark Object Cacheing
 
-+ (NSFetchRequest*)fetchRequestForResourcePath:(NSString*)resourcePath {
+//+ (NSArray*)fetchRequestsForResourcePath:(NSString*)resourcePath {
+//	return nil;
+//}
++ (NSArray*)objectsForResourcePath:(NSString*)resourcePath {
 	return nil;
 }
 

@@ -107,9 +107,9 @@ extern NSString* const RKDidEnterOnlineModeNotification;
 /**
  * Fetch methods for clients that implement local caching
  */
-- (RKRequest*)loadModels:(NSString*)resourcePath fetchRequest:(NSFetchRequest*)fetchRequest method:(RKRequestMethod)method delegate:(NSObject<RKModelLoaderDelegate>*)delegate;
+- (RKRequest*)loadModels:(NSString*)resourcePath oldObjectIds:(NSArray*)oldObjectIds method:(RKRequestMethod)method delegate:(NSObject<RKModelLoaderDelegate>*)delegate;
 
-- (RKRequest*)loadModels:(NSString*)resourcePath fetchRequest:(NSFetchRequest*)fetchRequest method:(RKRequestMethod)method params:(NSObject<RKRequestSerializable>*)params delegate:(NSObject<RKModelLoaderDelegate>*)delegate;
+- (RKRequest*)loadModels:(NSString*)resourcePath oldObjectIds:(NSArray*)oldObjectIds method:(RKRequestMethod)method params:(NSObject<RKRequestSerializable>*)params delegate:(NSObject<RKModelLoaderDelegate>*)delegate;
 
 ////////////////////////////////////////////////////////
 // Model Mappable object helpers

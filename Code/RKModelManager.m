@@ -96,32 +96,32 @@ static RKModelManager* sharedManager = nil;
 // Model Collection Loaders
 
 - (RKRequest*)loadModels:(NSString*)resourcePath method:(RKRequestMethod)method params:(NSObject<RKRequestSerializable>*)params delegate:(NSObject<RKModelLoaderDelegate>*)delegate {
-	return [self loadModels:resourcePath fetchRequest:nil method:method params:params delegate:delegate];
+	return [self loadModels:resourcePath oldObjectIds:nil method:method params:params delegate:delegate];
 }
 
 - (RKRequest*)loadModels:(NSString*)resourcePath delegate:(NSObject<RKModelLoaderDelegate>*)delegate {
-	return [self loadModels:resourcePath fetchRequest:nil method:RKRequestMethodGET params:nil delegate:delegate];
+	return [self loadModels:resourcePath oldObjectIds:nil method:RKRequestMethodGET params:nil delegate:delegate];
 }
 
 - (RKRequest*)loadModels:(NSString*)resourcePath method:(RKRequestMethod)method delegate:(NSObject<RKModelLoaderDelegate>*)delegate {
-	return [self loadModels:resourcePath fetchRequest:nil method:method params:nil delegate:delegate];
+	return [self loadModels:resourcePath oldObjectIds:nil method:method params:nil delegate:delegate];
 }
 
 - (RKRequest*)loadModels:(NSString*)resourcePath params:(NSDictionary*)params delegate:(NSObject<RKModelLoaderDelegate>*)delegate {
-	return [self loadModels:resourcePath fetchRequest:nil method:RKRequestMethodGET params:params delegate:delegate];
+	return [self loadModels:resourcePath oldObjectIds:nil method:RKRequestMethodGET params:params delegate:delegate];
 }
 
-- (RKRequest*)loadModels:(NSString*)resourcePath fetchRequest:(NSFetchRequest*)fetchRequest method:(RKRequestMethod)method delegate:(NSObject<RKModelLoaderDelegate>*)delegate {
-	return [self loadModels:resourcePath fetchRequest:fetchRequest method:method params:nil delegate:delegate];
+- (RKRequest*)loadModels:(NSString*)resourcePath oldObjectIds:(NSArray*)oldObjectIds method:(RKRequestMethod)method delegate:(NSObject<RKModelLoaderDelegate>*)delegate {
+	return [self loadModels:resourcePath oldObjectIds:oldObjectIds method:method params:nil delegate:delegate];
 }
 
-- (RKRequest*)loadModels:(NSString*)resourcePath fetchRequest:(NSFetchRequest*)fetchRequest method:(RKRequestMethod)method params:(NSObject<RKRequestSerializable>*)params delegate:(NSObject<RKModelLoaderDelegate>*)delegate {
+- (RKRequest*)loadModels:(NSString*)resourcePath oldObjectIds:(NSArray*)oldObjectIds method:(RKRequestMethod)method params:(NSObject<RKRequestSerializable>*)params delegate:(NSObject<RKModelLoaderDelegate>*)delegate {
 	if ([self isOffline]) {
 		return nil;
 	}
 	
 	RKModelLoader* loader = [RKModelLoader loaderWithMapper:self.mapper];
-	loader.fetchRequest = fetchRequest;
+	loader.oldObjectIds = oldObjectIds;
 	loader.delegate = delegate;
 	
 	return [_client load:resourcePath method:method params:params delegate:loader callback:loader.callback];	

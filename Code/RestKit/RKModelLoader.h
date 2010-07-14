@@ -31,7 +31,7 @@
 	RKModelMapper* _mapper;
 	NSObject<RKModelLoaderDelegate>* _delegate;
 	SEL _callback;
-	NSFetchRequest* _fetchRequest;
+	NSArray* _oldObjectIds;
 }
 
 /**
@@ -58,7 +58,7 @@
  *
  * TODO: May belong in an inherited subclass to isolate persistent/non-persistent mapping in the future.
  */
-@property (nonatomic, retain) NSFetchRequest* fetchRequest;
+@property (nonatomic, retain) NSArray* oldObjectIds;
 
 + (id)loaderWithMapper:(RKModelMapper*)mapper;
 

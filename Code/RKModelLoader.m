@@ -15,7 +15,7 @@
 
 @implementation RKModelLoader
 
-@synthesize mapper = _mapper, delegate = _delegate, callback = _callback, fetchRequest = _fetchRequest;
+@synthesize mapper = _mapper, delegate = _delegate, callback = _callback, oldObjectIds = _oldObjectIds;
 
 + (id)loaderWithMapper:(RKModelMapper*)mapper {
 	return [[[self alloc] initWithMapper:mapper] autorelease];
@@ -138,10 +138,9 @@
 			results = [NSArray arrayWithObjects:result, nil];
 		}
 		
-		if (self.fetchRequest) {
-			// TODO: Get rid of objectsWithRequest on 
-			NSArray* cachedObjects = [RKManagedModel objectsWithRequest:self.fetchRequest];
-			
+		if (self.oldObjectIds) {
+			// TODO: Get rid of objectsWithRequest on
+			NSArray* cachedObjects = [RKManagedModel objectsWithIds:self.oldObjectIds];
 			for (id object in cachedObjects) {
 				if ([object isKindOfClass:[RKManagedModel class]]) {
 					if (NO == [results containsObject:object]) {
