@@ -72,6 +72,11 @@ extern NSString* const RKDidEnterOnlineModeNotification;
 - (BOOL)isOnline;
 
 /**
+ * True when we are in offline mode
+ */
+- (BOOL)isOffline;
+
+/**
  * Register a model mapping from a domain model class to an XML element name
  */
 - (void)registerModel:(Class<RKModelMappable>)class forElementNamed:(NSString*)elementName;
