@@ -72,10 +72,9 @@
 	// that were model mapped on a background thread. We look up the objects by ID and then
 	// notify the delegate that the operation has completed.
 	NSMutableArray* objects = [NSMutableArray arrayWithCapacity:[models count]];
-	RKManagedObjectStore* objectStore = [[RKModelManager manager] objectStore];
 	for (id object in models) {
 		if ([object isKindOfClass:[NSManagedObjectID class]]) {
-			[objects addObject:[objectStore objectWithID:(NSManagedObjectID*)object]];
+			[objects addObject:[RKManagedModel objectWithId:(NSManagedObjectID*)object]];
 		} else {
 			[objects addObject:object];
 		}
@@ -121,7 +120,7 @@
 	if (mainThreadModel) {
 		if ([mainThreadModel isKindOfClass:[NSManagedObject class]]) {
 			NSManagedObjectID* modelID = [(NSManagedObject*)mainThreadModel objectID];
-			NSManagedObject* backgroundThreadModel = [objectStore objectWithID:modelID];
+			NSManagedObject* backgroundThreadModel = [RKManagedModel objectWithId:modelID];
 			[_mapper mapModel:backgroundThreadModel fromString:[response bodyAsString]];
 			results = [NSArray arrayWithObject:backgroundThreadModel];
 		} else {
