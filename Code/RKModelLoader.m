@@ -150,23 +150,26 @@
 		}
 	}
 	
-	// NOTE: Passing Core Data objects across threads is not safe. 
-	// Iterate over each model and coerce Core Data objects into ID's to pass across the threads.
-	// The object ID's will be deserialized back into objects on the main thread before the delegate is called back
-	NSMutableArray* models = [NSMutableArray arrayWithCapacity:[results count]];
-	for (id object in results) {
-		if ([object isKindOfClass:[NSManagedObject class]]) {
-			[models addObject:[(NSManagedObject*)object objectID]];
-		} else {
-			[models addObject:object];			 
-		}
-	}
-		
+	// Before looking up NSManagedObjectIDs, need to save to ensure we do not have
+	// temporary IDs for new objects prior to handing the objectIDs across threads
 	NSError* error = [[[RKModelManager manager] objectStore] save];
 	if (nil != error) {
 		NSDictionary* infoDictionary = [[NSDictionary dictionaryWithObjectsAndKeys:response, @"response", error, @"error", nil] retain];
 		[self performSelectorOnMainThread:@selector(informDelegateOfModelLoadErrorWithInfoDictionary:) withObject:infoDictionary waitUntilDone:NO];
+		
 	} else {
+		// NOTE: Passing Core Data objects across threads is not safe. 
+		// Iterate over each model and coerce Core Data objects into ID's to pass across the threads.
+		// The object ID's will be deserialized back into objects on the main thread before the delegate is called back
+		NSMutableArray* models = [NSMutableArray arrayWithCapacity:[results count]];
+		for (id object in results) {
+			if ([object isKindOfClass:[NSManagedObject class]]) {
+				[models addObject:[(NSManagedObject*)object objectID]];
+			} else {
+				[models addObject:object];			 
+			}
+		}		
+		
 		NSDictionary* infoDictionary = [[NSDictionary dictionaryWithObjectsAndKeys:response, @"response", models, @"models", nil] retain];
 		[self performSelectorOnMainThread:@selector(informDelegateOfModelLoadWithInfoDictionary:) withObject:infoDictionary waitUntilDone:NO];
 	}

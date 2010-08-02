@@ -20,13 +20,13 @@
 }
 
 + (NSManagedObject*)objectWithId:(NSManagedObjectID*)objectId {
-	return [[self managedObjectContext] objectWithID:objectId];
+	return [[RKManagedModel managedObjectContext] objectWithID:objectId];
 }
 
 + (NSArray*)objectsWithIds:(NSArray*)objectIds {
 	NSMutableArray* objects = [[NSMutableArray alloc] init];
 	for (NSManagedObjectID* objectId in objectIds) {
-		[objects addObject:[[self managedObjectContext] objectWithID:objectId]];
+		[objects addObject:[[RKManagedModel managedObjectContext] objectWithID:objectId]];
 	}
 	NSArray* objectArray = [NSArray arrayWithArray:objects];
 	[objects release];
@@ -51,7 +51,7 @@
 
 + (NSEntityDescription*)entity {
 	NSString* className = [NSString stringWithCString:class_getName([self class]) encoding:NSASCIIStringEncoding];
-	return [NSEntityDescription entityForName:className inManagedObjectContext:[self managedObjectContext]];
+	return [NSEntityDescription entityForName:className inManagedObjectContext:[RKManagedModel managedObjectContext]];
 }
 
 + (NSFetchRequest*)request {
@@ -65,7 +65,7 @@
 + (NSArray*)objectsWithRequest:(NSFetchRequest*)request {
 	NSError* error = nil;
 //	NSLog(@"About to perform a collection request: %@", request);
-	NSArray* objects = [[self managedObjectContext] executeFetchRequest:request error:&error];
+	NSArray* objects = [[RKManagedModel managedObjectContext] executeFetchRequest:request error:&error];
 	if (error != nil) {
 		NSLog(@"Error: %@", [error localizedDescription]);
 		// TODO: Error handling
@@ -102,13 +102,13 @@
 + (NSUInteger)count {
 	NSFetchRequest *request = [self request];	
 	NSError *error = nil;
-	NSUInteger count = [[self managedObjectContext] countForFetchRequest:request error:&error];
+	NSUInteger count = [[RKManagedModel managedObjectContext] countForFetchRequest:request error:&error];
 	// TODO: Error handling...
 	return count;
 }
 
 + (id)newObject {
-	id model = [[self alloc] initWithEntity:[self entity] insertIntoManagedObjectContext:[self managedObjectContext]];
+	id model = [[self alloc] initWithEntity:[self entity] insertIntoManagedObjectContext:[RKManagedModel managedObjectContext]];
 	return [model autorelease];
 }
 
